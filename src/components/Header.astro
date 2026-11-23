@@ -1,0 +1,297 @@
+---
+import { contest } from '../data/contest';
+
+const links = [
+  { href: '#topic', label: '주제' },
+  { href: '#entry', label: '참가' },
+  { href: '#judging', label: '심사' },
+  { href: '#schedule', label: '일정' },
+  { href: '#prizes', label: '시상' },
+  { href: '#faq', label: 'FAQ' },
+];
+---
+
+<header class="header" data-header>
+  <div class="wrap header__bar">
+    <a class="header__brand" href="#top">
+      <svg class="header__mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M3 8h18M3 16h18M8 3v18M16 3v18" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+        <rect x="13.5" y="5.5" width="5" height="5" fill="var(--amber)"></rect>
+      </svg>
+      <span class="header__name"><span class="header__name-prefix">스마트시티 </span>데이터분석 경진대회</span>
+      <span class="header__year mono">{contest.year}</span>
+    </a>
+
+    <nav class="header__nav" id="site-nav" aria-label="주요 메뉴">
+      <ul role="list">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} data-nav-link>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="header__cta" href="#submit">제출 방법</a>
+
+    <button class="header__toggle" type="button" data-menu-toggle aria-controls="site-nav" aria-expanded="false" aria-label="메뉴">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    color: var(--on-night);
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+
+  /* 히어로 위에서 스크롤을 시작하면 글자가 겹치지 않게 밤색으로 받친다. */
+  .header.is-stuck {
+    background: rgb(8 12 22 / 0.78);
+    border-bottom-color: var(--night-rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .header.is-solid,
+  .header.is-open {
+    background: rgb(244 241 234 / 0.94);
+    color: var(--ink);
+    border-bottom-color: var(--rule);
+    backdrop-filter: saturate(1.4) blur(14px);
+  }
+
+  .header__bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: var(--header-h);
+  }
+
+  /* 밤색 위에서는 포커스 테두리를 밝은 앰버로 쓴다. */
+  .header:not(.is-solid):not(.is-open) a:focus-visible,
+  .header:not(.is-solid):not(.is-open) button:focus-visible {
+    outline-color: var(--amber);
+  }
+
+  .header.is-solid .header__nav a::after,
+  .header.is-open .header__nav a::after {
+    background: var(--amber-deep);
+  }
+
+  .header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-right: auto;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .header__year {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.6;
+  }
+
+  .header__nav ul {
+    display: flex;
+    gap: clamp(1rem, 2.2vw, 2.25rem);
+  }
+
+  .header__nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    opacity: 0.72;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  .header__nav a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0.5rem;
+    height: 2px;
+    background: var(--amber);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .header__nav a:hover,
+  .header__nav a[aria-current] {
+    opacity: 1;
+  }
+
+  .header__nav a:hover::after,
+  .header__nav a[aria-current]::after {
+    transform: scaleX(1);
+  }
+
+  .header__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 1.125rem;
+    background: var(--amber);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .header__cta:hover {
+    background: var(--on-night);
+  }
+
+  .header.is-solid .header__cta:hover,
+  .header.is-open .header__cta:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .header__toggle {
+    display: none;
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.625rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .header__toggle span {
+    position: absolute;
+    left: 0.625rem;
+    right: 0.625rem;
+    height: 2px;
+    background: currentColor;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .header__toggle span:first-child {
+    top: 1.0625rem;
+  }
+
+  .header__toggle span:last-child {
+    top: 1.5625rem;
+  }
+
+  .header.is-open .header__toggle span:first-child {
+    transform: translateY(0.25rem) rotate(45deg);
+  }
+
+  .header.is-open .header__toggle span:last-child {
+    transform: translateY(-0.25rem) rotate(-45deg);
+  }
+
+  @media (max-width: 60rem) {
+    .header.is-open {
+      background: var(--paper);
+      backdrop-filter: none;
+    }
+
+    .header__bar {
+      gap: 0.75rem;
+    }
+
+    .header__toggle {
+      display: block;
+    }
+
+    .header__nav {
+      position: absolute;
+      inset: 100% 0 auto;
+      display: none;
+      /* 가로로 눕힌 화면이나 크게 확대한 화면에서도 마지막 항목까지 닿게 한다. */
+      max-height: calc(100vh - var(--header-h));
+      max-height: calc(100dvh - var(--header-h));
+      padding: 0.5rem var(--gutter) 1.5rem;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .header.is-open .header__nav {
+      display: block;
+    }
+
+    .header__nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .header__nav a {
+      width: 100%;
+      min-height: 3.25rem;
+      font-size: 1.125rem;
+      border-bottom: 1px solid var(--rule);
+      opacity: 1;
+    }
+
+    .header__nav a::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .header__name-prefix,
+    .header__year {
+      display: none;
+    }
+  }
+
+  @media (max-width: 24rem) {
+    .header__bar {
+      gap: 0.5rem;
+    }
+
+    .header__brand {
+      gap: 0.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .header__cta {
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  /* 아주 좁은 화면에서는 메뉴 단추가 밀려나지 않도록 머리말의 제출 단추를 뺀다. 같은 단추가 히어로에 있다. */
+  @media (max-width: 21rem) {
+    .header__cta {
+      display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .header__toggle span {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+</style>

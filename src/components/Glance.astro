@@ -1,0 +1,156 @@
+---
+import { contest, prizes, totalPrize, totalWinners } from '../data/contest';
+import { koreanDate, manLabel, toMan } from '../lib/format';
+
+const deadline = koreanDate(contest.deadline);
+const topPrize = prizes[0];
+---
+
+<section class="glance" aria-label="한눈에 보기">
+  <div class="wrap">
+    <dl class="glance__grid">
+      <div class="glance__cell glance__cell--wide">
+        <dt class="label">접수 마감</dt>
+        <dd>
+          <span class="glance__figure num" aria-hidden="true">{deadline.monthDay}</span>
+          <span class="sr-only">{deadline.spoken}</span>
+          <span class="glance__note" aria-hidden="true">{deadline.weekday}요일 {deadline.time}까지 · 이메일 제출</span>
+          <span class="sr-only">{deadline.weekday}요일 {deadline.spokenTime}까지 이메일 제출</span>
+        </dd>
+      </div>
+      <div class="glance__cell glance__cell--amber">
+        <dt class="label">총상금</dt>
+        <dd>
+          <span class="glance__figure num">{toMan(totalPrize)}<small>만원</small></span>
+          <span class="glance__note">{topPrize && `${topPrize.tier} ${manLabel(topPrize.amount)}`} · {totalWinners}팀 시상</span>
+        </dd>
+      </div>
+      <div class="glance__cell">
+        <dt class="label">참가</dt>
+        <dd>
+          <span class="glance__figure num" aria-hidden="true">1–{contest.maxTeamSize}<small>명</small></span>
+          <span class="sr-only">1명에서 {contest.maxTeamSize}명</span>
+          <span class="glance__note">개인 또는 팀</span>
+        </dd>
+      </div>
+      <div class="glance__cell">
+        <dt class="label">주제</dt>
+        <dd>
+          <span class="glance__figure">자유</span>
+          <span class="glance__note">스마트시티 전 분야</span>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .glance {
+    position: relative;
+    z-index: 2;
+    margin-top: calc(clamp(5.5rem, 4rem + 5vw, 8.5rem) * -0.62);
+    padding-bottom: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .glance__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1.25fr 1fr 1fr;
+    margin: 0;
+    background: var(--sheet);
+    box-shadow: var(--shadow-sheet);
+    animation: glance-in 1.1s var(--ease-out) 900ms both;
+  }
+
+  .glance__cell {
+    padding: clamp(1.25rem, 0.9rem + 1.4vw, 2.25rem);
+    border-left: 1px solid var(--rule);
+  }
+
+  .glance__cell:first-child {
+    border-left: 0;
+  }
+
+  .glance__cell--amber {
+    background: var(--amber);
+    border-left-color: transparent;
+  }
+
+  .glance__cell--amber + .glance__cell {
+    border-left-color: transparent;
+  }
+
+  .glance__cell dt {
+    color: var(--ink-muted);
+  }
+
+  .glance__cell--amber dt {
+    color: var(--ink);
+  }
+
+  .glance__cell dd {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .glance__figure {
+    font-size: var(--text-figure);
+    font-weight: var(--weight-display);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+  }
+
+  .glance__figure small {
+    margin-left: 0.12em;
+    font-size: 0.4em;
+    letter-spacing: -0.02em;
+  }
+
+  .glance__note {
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .glance__cell--amber .glance__note {
+    color: var(--ink);
+  }
+
+  @keyframes glance-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 2rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 60rem) {
+    .glance__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .glance__cell:nth-child(3) {
+      border-left: 0;
+    }
+
+    .glance__cell:nth-child(n + 3) {
+      border-top: 1px solid var(--rule);
+    }
+
+    .glance__cell--amber + .glance__cell {
+      border-left-color: transparent;
+    }
+  }
+
+  @media (max-width: 26rem) {
+    .glance__figure {
+      font-size: 2.375rem;
+    }
+  }
+</style>

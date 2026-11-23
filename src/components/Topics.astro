@@ -1,0 +1,82 @@
+---
+import Section from './Section.astro';
+import { topicExamples } from '../data/contest';
+---
+
+<Section
+  id="topic"
+  index="01"
+  label="Topic"
+  title="자유주제"
+  lede="스마트시티와 관련된 주제라면 무엇이든 분석할 수 있습니다. 올해는 데이터를 제공하지 않습니다. 풀고 싶은 도시 문제를 정하고, 그 문제에 맞는 데이터를 직접 고르세요."
+>
+  <div class="topics">
+    <p class="topics__caption label" data-reveal>예시 분야</p>
+    <ul class="topics__list" role="list">
+      {
+        topicExamples.map((topic, i) => (
+          <li class="topics__row" data-reveal style={`--i:${i}`}>
+            <span class="topics__code mono num" aria-hidden="true">{String.fromCharCode(65 + i)}</span>
+            <span class="topics__field">{topic.field}</span>
+            <span class="topics__examples">{topic.examples}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="topics__note" data-reveal>이해를 돕기 위한 예시입니다. 여기에 없는 주제로도 참가할 수 있습니다.</p>
+  </div>
+</Section>
+
+<style>
+  .topics {
+    margin-top: var(--space-block);
+  }
+
+  .topics__caption {
+    padding-bottom: 0.875rem;
+    color: var(--ink-muted);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .topics__row {
+    display: grid;
+    grid-template-columns: 3rem minmax(9rem, 1fr) minmax(0, 2fr);
+    align-items: baseline;
+    gap: 0.25rem 1.5rem;
+    padding-block: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .topics__code {
+    color: var(--amber-deep);
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .topics__field {
+    font-size: var(--text-title);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+  }
+
+  .topics__examples {
+    color: var(--ink-muted);
+  }
+
+  .topics__note {
+    margin-top: 1.25rem;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  @media (max-width: 40rem) {
+    .topics__row {
+      grid-template-columns: 2rem minmax(0, 1fr);
+    }
+
+    .topics__examples {
+      grid-column: 2;
+    }
+  }
+</style>

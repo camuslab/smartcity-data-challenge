@@ -1,0 +1,123 @@
+---
+interface Props {
+  id: string;
+  index: string;
+  label: string;
+  /** 줄바꿈(\n)으로 행을 나눈다. */
+  title: string;
+  lede?: string;
+  tone?: 'paper' | 'amber';
+}
+
+const { id, index, label, title, lede, tone = 'paper' } = Astro.props;
+const lines = title.split('\n');
+---
+
+<section class:list={['section', `section--${tone}`]} id={id} aria-labelledby={`${id}-title`}>
+  <div class="wrap section__grid">
+    <!-- 번호와 영문 이름은 제목과 겹치는 꾸밈이라 화면낭독기에서는 건너뛴다. -->
+    <div class="section__rail" aria-hidden="true">
+      <p class="section__index mono num">{index}</p>
+      <p class="section__label label" lang="en">{label}</p>
+    </div>
+    <div class="section__body">
+      <h2 class="section__title" id={`${id}-title`} data-reveal>
+        {lines.map((line) => <><span>{line}</span>{' '}</>)}
+      </h2>
+      {lede && <p class="section__lede" data-reveal style="--i:1">{lede}</p>}
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--space-section);
+    border-top: 1px solid var(--rule);
+  }
+
+  .section--amber {
+    background: var(--amber);
+    border-top-color: transparent;
+  }
+
+  .section__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 10fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .section__rail {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    align-self: start;
+    padding-top: 0.5rem;
+  }
+
+  .section__index {
+    color: var(--amber-deep);
+    font-size: clamp(2.5rem, 1.6rem + 2.6vw, 4.25rem);
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .section--amber .section__index {
+    color: var(--ink);
+  }
+
+  .section__label {
+    margin-top: 0.875rem;
+    color: var(--ink-muted);
+  }
+
+  .section--amber .section__label {
+    color: var(--ink);
+  }
+
+  .section__title {
+    font-size: var(--text-display);
+    font-weight: var(--weight-display);
+    line-height: 1.06;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .section__title span {
+    display: block;
+  }
+
+  .section__lede {
+    max-width: 39rem;
+    margin-top: clamp(1.25rem, 1rem + 1vw, 2rem);
+    color: var(--ink-muted);
+    font-size: var(--text-lede);
+    line-height: 1.7;
+  }
+
+  .section--amber .section__lede {
+    color: var(--ink);
+  }
+
+  @media (max-width: 60rem) {
+    .section__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .section__rail {
+      position: static;
+      display: flex;
+      align-items: baseline;
+      gap: 0.875rem;
+      padding-top: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .section__index {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    .section__label {
+      margin-top: 0;
+    }
+  }
+</style>

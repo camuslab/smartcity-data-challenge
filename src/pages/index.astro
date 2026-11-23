@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Glance from '../components/Glance.astro';
+import Topics from '../components/Topics.astro';
+import Entry from '../components/Entry.astro';
+import Judging from '../components/Judging.astro';
+import Schedule from '../components/Schedule.astro';
+import Prizes from '../components/Prizes.astro';
+import ConvergenceDay from '../components/ConvergenceDay.astro';
+import Faq from '../components/Faq.astro';
+import Closing from '../components/Closing.astro';
+import { contest, totalPrize } from '../data/contest';
+import { koreanDate, manLabel } from '../lib/format';
+
+const deadline = koreanDate(contest.deadline);
+const title = `${contest.name} ${contest.year} | ${contest.host}`;
+const description = `${contest.eligibility} 대상 데이터분석 경진대회. 주제 자유, PPT ${contest.maxSlides}장 이내, ${deadline.spoken} ${deadline.time} 마감, 총상금 ${manLabel(totalPrize)}.`;
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Glance />
+    <Topics />
+    <Entry />
+    <Judging />
+    <Schedule />
+    <Prizes />
+    <ConvergenceDay />
+    <Faq />
+  </main>
+  <Closing />
+</Base>

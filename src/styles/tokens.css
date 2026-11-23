@@ -1,0 +1,60 @@
+/*
+ * 디자인 토큰.
+ * 밤의 도시 지도(히어로)와 종이(본문) 두 가지 면, 가로등 색 앰버 하나를 강조색으로 쓴다.
+ */
+:root {
+  /* 밤 */
+  --night: #080c16;
+  --night-rule: rgb(160 184 230 / 0.16);
+  --on-night: #f3f1ea;
+  --on-night-muted: #a3adc0;
+
+  /* 종이 */
+  --paper: #f4f1ea;
+  --paper-deep: #e8e3d6;
+  --sheet: #fffdf8;
+  --ink: #10151f;
+  --ink-muted: #505868;
+  --rule: rgb(16 21 31 / 0.16);
+  --rule-strong: rgb(16 21 31 / 0.82);
+
+  /* 신호 */
+  --amber: #ffb224;
+  --amber-deep: #a8470a;
+
+  /* 글꼴 */
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  /* 한글은 JetBrains Mono에 없으므로 Pretendard로 넘긴다. */
+  --font-mono: 'JetBrains Mono Variable', 'Pretendard Variable', Pretendard, ui-monospace, 'SFMono-Regular',
+    Consolas, monospace;
+
+  --text-hero: clamp(3.25rem, 0.9rem + 9.6vw, 9.5rem);
+  --text-display: clamp(2.5rem, 1.1rem + 5.4vw, 5.75rem);
+  --text-figure: clamp(2.75rem, 1.4rem + 4.6vw, 5rem);
+  --text-title: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  --text-lede: clamp(1.0625rem, 0.98rem + 0.4vw, 1.3125rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.9375rem;
+  --text-label: 0.75rem;
+
+  --weight-display: 800;
+  --tracking-display: -0.045em;
+  --tracking-label: 0.1em;
+
+  /* 간격: 일부러 균일하지 않게 둔다 */
+  --gutter: clamp(1.25rem, 0.6rem + 3.2vw, 4rem);
+  --measure: 77.5rem;
+  --space-section: clamp(5.5rem, 3.5rem + 8vw, 11rem);
+  --space-block: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+  --header-h: 4.5rem;
+
+  /* 모션 */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur-base: 420ms;
+  --dur-slow: 900ms;
+
+  --radius: 2px;
+  --shadow-sheet: 0 1px 0 rgb(16 21 31 / 0.08), 0 24px 48px -24px rgb(8 12 22 / 0.45);
+}

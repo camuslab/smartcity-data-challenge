@@ -1,0 +1,144 @@
+---
+import { contest } from '../data/contest';
+
+const subject = `[${contest.name}] 팀명 - 발표 주제`;
+const bodyLines = [
+  '팀명:',
+  '참여자 (학번 / 이름):',
+  '  1.',
+  '  2.',
+  '발표 주제:',
+  '함께 내는 결과물 (웹페이지·동영상 링크, 선택):',
+];
+const body = bodyLines.join('\n');
+// 메일 주소 규격(RFC 6068)은 본문 줄바꿈을 CRLF로 정한다. 일부 메일 앱은 LF만 있으면 줄을 붙여 버린다.
+const mailBody = bodyLines.join('\r\n');
+const mailto = `mailto:${contest.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`;
+---
+
+<div class="mail" id="submit" data-reveal>
+  <div class="mail__head">
+    <p class="label">제출 메일 양식</p>
+    <p class="mail__hint">아래 양식을 그대로 써도 되고, 같은 내용이 들어 있으면 형식은 자유입니다.</p>
+  </div>
+
+  <dl class="mail__fields">
+    <div>
+      <dt>받는 사람</dt>
+      <dd><a class="mono" href={mailto}>{contest.email}</a></dd>
+    </div>
+    <div>
+      <dt>제목</dt>
+      <dd>{subject}</dd>
+    </div>
+    <div>
+      <dt>첨부</dt>
+      <dd>발표 자료 (PPT {contest.maxSlides}장 이내)</dd>
+    </div>
+  </dl>
+
+  <pre class="mail__body mono" id="mail-template" role="group" aria-label="메일 본문 양식">{body}</pre>
+
+  <div class="mail__actions">
+    <a class="btn btn--ink" href={mailto}>
+      메일 앱에서 열기
+      <span class="btn__arrow" aria-hidden="true">→</span>
+    </a>
+    <button class="btn btn--ghost-ink" type="button" data-copy-target="mail-template" data-copy-status="mail-copy-status">
+      본문 양식 복사
+    </button>
+    <p class="mail__status" id="mail-copy-status" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<style>
+  .mail {
+    margin-top: var(--space-block);
+    background: var(--sheet);
+    border: 1px solid var(--rule-strong);
+    box-shadow: 10px 10px 0 var(--paper-deep);
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+
+  .mail__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding: 1rem clamp(1.25rem, 0.8rem + 1.6vw, 2rem);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .mail__head .label {
+    color: var(--amber);
+  }
+
+  .mail__hint {
+    color: rgb(244 241 234 / 0.78);
+    font-size: var(--text-small);
+  }
+
+  .mail__fields {
+    margin: 0;
+  }
+
+  .mail__fields > div {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.875rem clamp(1.25rem, 0.8rem + 1.6vw, 2rem);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .mail__fields dt {
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  .mail__fields dd {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .mail__fields a {
+    color: var(--amber-deep);
+    font-weight: 500;
+  }
+
+  .mail__body {
+    margin: 0;
+    padding: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+    font-size: 0.9375rem;
+    line-height: 1.9;
+    white-space: pre-wrap;
+  }
+
+  .mail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 clamp(1.25rem, 0.8rem + 1.6vw, 2rem) clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  }
+
+  .mail__status {
+    flex-basis: 100%;
+    min-height: 1.5em;
+    color: var(--amber-deep);
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  @media (max-width: 30rem) {
+    .mail {
+      box-shadow: 6px 6px 0 var(--paper-deep);
+    }
+
+    .mail__fields > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.125rem;
+    }
+  }
+</style>

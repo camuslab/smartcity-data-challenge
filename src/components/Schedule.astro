@@ -1,0 +1,219 @@
+---
+import Section from './Section.astro';
+import { contest, schedule } from '../data/contest';
+import { koreanDate } from '../lib/format';
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const deadline = koreanDate(contest.deadline);
+const resultDay = koreanDate(contest.firstResult);
+const finalDay = koreanDate(contest.convergenceDay.at);
+const items = schedule.map((item) => {
+  const start = new Date(item.at).getTime();
+  return {
+    ...item,
+    date: koreanDate(item.at),
+    // 날짜만 있는 일정은 그날이 끝나야 지난 것으로 본다.
+    endMs: item.showTime ? start : start + DAY_MS - 1,
+  };
+});
+---
+
+<Section
+  id="schedule"
+  index="04"
+  label="Schedule"
+  title={`${deadline.spoken}\n${deadline.time} 마감`}
+  lede={`${resultDay.spoken}에 1차 결과를 알리고, ${finalDay.spoken} 컨버전스 데이에서 2차 심사와 시상을 합니다.`}
+>
+  <ol class="timeline" role="list">
+    {
+      items.map((item, i) => (
+        <li class="timeline__item" data-event-end={item.endMs} data-reveal style={`--i:${i}`}>
+          <div class="timeline__date">
+            <time class="timeline__day num" datetime={item.at.slice(0, 10)}>
+              <span aria-hidden="true">{item.date.monthDay}</span>
+              <span class="sr-only">{item.date.spoken}</span>
+            </time>
+            <span class="timeline__weekday mono" aria-hidden="true">
+              {item.date.weekday}요일{item.showTime && ` ${item.date.time}`}
+            </span>
+            <span class="sr-only">
+              {item.date.weekday}요일{item.showTime && ` ${item.date.spokenTime}`}
+            </span>
+          </div>
+          <span class="timeline__dot" aria-hidden="true" />
+          <div class="timeline__body">
+            <p class="timeline__chip mono num" data-event-chip />
+            <h3 class="timeline__title">{item.title}</h3>
+            <p class="timeline__detail">{item.detail}</p>
+            {item.place && <p class="timeline__place mono">{item.place}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</Section>
+
+<style>
+  .timeline {
+    position: relative;
+    margin-top: var(--space-block);
+    border-top: 2px solid var(--ink);
+  }
+
+  .timeline__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) 1.5rem minmax(0, 7fr);
+    column-gap: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+    padding-block: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .timeline__date {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .timeline__day {
+    font-size: var(--text-figure);
+    font-weight: var(--weight-display);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .timeline__weekday {
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  /* 세로 선: 항목마다 이어 붙인다. */
+  .timeline__dot {
+    position: relative;
+    justify-self: center;
+    width: 2px;
+    margin-block: calc(clamp(1.75rem, 1.2rem + 2vw, 3rem) * -1);
+    background: var(--rule);
+  }
+
+  .timeline__dot::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: calc(clamp(1.75rem, 1.2rem + 2vw, 3rem) + 0.85rem);
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--paper);
+    transform: translateX(-50%);
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+
+  .timeline__item[data-phase='done'] .timeline__dot {
+    background: var(--ink);
+  }
+
+  .timeline__item[data-phase='done'] .timeline__dot::after {
+    background: var(--ink);
+  }
+
+  .timeline__item[data-phase='next'] .timeline__dot::after {
+    border-color: var(--amber-deep);
+    background: var(--amber);
+    box-shadow: 0 0 0 5px rgb(255 178 36 / 0.3);
+  }
+
+  .timeline__item[data-phase='done'] .timeline__day,
+  .timeline__item[data-phase='done'] .timeline__title {
+    color: var(--ink-muted);
+  }
+
+  .timeline__chip {
+    display: inline-block;
+    font-size: var(--text-label);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .timeline__chip:empty {
+    display: none;
+  }
+
+  .timeline__item[data-phase='next'] .timeline__chip {
+    margin-bottom: 0.625rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--ink);
+    color: var(--amber);
+  }
+
+  .timeline__item[data-phase='done'] .timeline__chip {
+    margin-bottom: 0.625rem;
+    color: var(--ink-muted);
+  }
+
+  .timeline__title {
+    font-size: var(--text-title);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+  }
+
+  .timeline__detail {
+    max-width: 30rem;
+    margin-top: 0.5rem;
+    color: var(--ink-muted);
+  }
+
+  .timeline__place {
+    margin-top: 0.75rem;
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .timeline__place::before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 0.5rem;
+    background: var(--amber-deep);
+  }
+
+  @media (forced-colors: active) {
+    .timeline__dot,
+    .timeline__dot::after {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .timeline__item {
+      grid-template-columns: 1.5rem minmax(0, 1fr);
+      column-gap: 1rem;
+    }
+
+    .timeline__date {
+      grid-column: 2;
+      grid-row: 1;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline__dot {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .timeline__body {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
+</style>

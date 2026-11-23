@@ -1,0 +1,122 @@
+---
+import Section from './Section.astro';
+import { contest, faq } from '../data/contest';
+---
+
+<Section id="faq" index="06" label="FAQ" title={'자주 묻는\n질문.'}>
+  <div class="faq">
+    {
+      faq.map((item, i) => (
+        <details class="faq__item" data-reveal style={`--i:${Math.min(i, 4)}`}>
+          <summary>
+            <span class="faq__q">{item.q}</span>
+            <span class="faq__icon" aria-hidden="true" />
+          </summary>
+          <p class="faq__a">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+  <p class="faq__contact" data-reveal>
+    여기에 없는 내용은 <a class="mono" href={`mailto:${contest.email}`}>{contest.email}</a>로 물어보세요.
+  </p>
+</Section>
+
+<style>
+  .faq {
+    margin-top: var(--space-block);
+    border-top: 2px solid var(--ink);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .faq__item summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1.5rem;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: clamp(1.125rem, 0.9rem + 0.9vw, 1.625rem);
+    font-size: clamp(1.0625rem, 1rem + 0.5vw, 1.3125rem);
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    list-style: none;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__item summary:hover {
+    color: var(--amber-deep);
+  }
+
+  .faq__icon {
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    right: 0.25rem;
+    top: calc(50% - 1px);
+    height: 2px;
+    background: currentColor;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .faq__item[open] .faq__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .faq__a {
+    max-width: 44rem;
+    padding-bottom: clamp(1.25rem, 1rem + 1vw, 1.875rem);
+    color: var(--ink-muted);
+  }
+
+  .faq__item[open] .faq__a {
+    animation: faq-open var(--dur-base) var(--ease-out);
+  }
+
+  .faq__contact {
+    margin-top: 1.5rem;
+    color: var(--ink-muted);
+  }
+
+  .faq__contact a {
+    color: var(--amber-deep);
+    font-weight: 500;
+  }
+
+  @media (forced-colors: active) {
+    .faq__icon::before,
+    .faq__icon::after {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+
+  @keyframes faq-open {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -0.375rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

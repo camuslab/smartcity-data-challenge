@@ -1,0 +1,271 @@
+---
+import Section from './Section.astro';
+import { contest, criteria, finalistTeams, meritTeams, prizes, totalPoints, totalWinners } from '../data/contest';
+import { koreanCount, koreanDate } from '../lib/format';
+
+const finalDay = koreanDate(contest.convergenceDay.at);
+const [grand, excellence, merit] = prizes;
+---
+
+<Section
+  id="judging"
+  index="03"
+  label="Judging"
+  title={`예선과 본선,\n총 ${koreanCount(totalWinners)} 팀 수상`}
+  lede={`예선(1차 심사)에서 상위 ${totalWinners}팀을 뽑습니다. 그중 ${finalistTeams}팀은 본선(2차 발표평가)에 올라 대상과 최우수상을 가리고, 나머지 ${meritTeams}팀은 우수상을 받습니다.`}
+>
+  <ol class="flow" role="list">
+    <li class="flow__stage" data-reveal>
+      <p class="label">1차 심사</p>
+      <p class="flow__figure num">{totalWinners}<small>팀 선정</small></p>
+      <p class="flow__text">제출한 결과물을 평가해 상위 {totalWinners}팀을 정합니다.</p>
+    </li>
+    <li class="flow__lanes">
+      <div class="flow__lane flow__lane--final" data-reveal style="--i:1">
+        <p class="label">상위 {finalistTeams}팀</p>
+        <h3 class="flow__title">2차 발표평가</h3>
+        <p class="flow__text">
+          {finalDay.monthDay} ({finalDay.weekday}) 오프라인 · 발표 {contest.talkMinutes}분 이내
+        </p>
+        <p class="flow__result">
+          {grand && `${grand.tier} ${grand.teams}팀`} · {excellence && `${excellence.tier} ${excellence.teams}팀`}
+        </p>
+      </div>
+      <div class="flow__lane" data-reveal style="--i:2">
+        <p class="label">나머지 {meritTeams}팀</p>
+        <h3 class="flow__title">우수상 확정</h3>
+        <p class="flow__text">발표평가 없이 1차 심사 결과로 수상합니다.</p>
+        <p class="flow__result">{merit && `${merit.tier} ${merit.teams}팀`}</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="criteria">
+    <div class="criteria__head" data-reveal>
+      <h3 class="criteria__title">평가 기준</h3>
+      <p class="criteria__total mono num">{totalPoints}점 만점</p>
+    </div>
+    <ul class="criteria__strip" role="list">
+      {
+        criteria.map((item, i) => (
+          <li class="criteria__cell" data-reveal style={`--i:${i}`}>
+            <span class="criteria__points num">{item.points}<small>점</small></span>
+            {/* 가운뎃점 뒤에서 줄이 바뀔 수 있게 한다. 좁은 화면에서 낱말 중간이 끊기지 않는다. */}
+            <span class="criteria__label">
+              {item.label.split('·').map((part, j) => (
+                <>
+                  {j > 0 && <>·<wbr /></>}
+                  {part}
+                </>
+              ))}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="criteria__note" data-reveal>최종 수상은 1차 심사와 2차 발표평가를 종합해 정합니다.</p>
+  </div>
+</Section>
+
+<style>
+  .flow {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    margin-top: var(--space-block);
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .flow__stage {
+    padding: clamp(1.5rem, 1rem + 1.8vw, 2.5rem) clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem) clamp(1.5rem, 1rem + 1.8vw, 2.5rem) 0;
+  }
+
+  .flow__figure {
+    margin-top: 0.75rem;
+    font-size: var(--text-figure);
+    font-weight: var(--weight-display);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .flow__figure small {
+    margin-left: 0.25em;
+    font-size: 0.34em;
+    letter-spacing: -0.02em;
+  }
+
+  .flow__lanes {
+    display: grid;
+    border-left: 1px solid var(--rule);
+  }
+
+  .flow__lane {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.25rem 1.5rem;
+    padding: clamp(1.25rem, 0.9rem + 1.4vw, 2rem) 0 clamp(1.25rem, 0.9rem + 1.4vw, 2rem) clamp(1.5rem, 1rem + 2vw, 3rem);
+  }
+
+  .flow__lane + .flow__lane {
+    border-top: 1px solid var(--rule);
+  }
+
+  /* 1차 심사에서 갈라져 나오는 가지 표시 */
+  .flow__lane::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    width: clamp(0.75rem, 0.5rem + 1vw, 1.75rem);
+    height: 2px;
+    background: var(--ink);
+  }
+
+  .flow__lane--final::before {
+    background: var(--amber-deep);
+  }
+
+  .flow__lane .label,
+  .flow__title,
+  .flow__lane .flow__text {
+    grid-column: 1;
+  }
+
+  .flow__lane .label {
+    color: var(--ink-muted);
+  }
+
+  .flow__lane--final .label {
+    color: var(--amber-deep);
+  }
+
+  .flow__title {
+    font-size: var(--text-title);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+  }
+
+  .flow__text {
+    margin-top: 0.5rem;
+    color: var(--ink-muted);
+  }
+
+  .flow__result {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--rule-strong);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .flow__lane--final .flow__result {
+    background: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .criteria {
+    margin-top: var(--space-block);
+  }
+
+  .criteria__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.875rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .criteria__title {
+    font-size: var(--text-title);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .criteria__total {
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  .criteria__strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .criteria__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 0.9rem + 1.2vw, 1.75rem) clamp(1rem, 0.6rem + 1.2vw, 1.75rem);
+    border-left: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .criteria__cell:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .criteria__points {
+    font-size: clamp(2rem, 1.5rem + 1.6vw, 2.75rem);
+    font-weight: var(--weight-display);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .criteria__points small {
+    margin-left: 0.15em;
+    font-size: 0.42em;
+    font-weight: 700;
+  }
+
+  .criteria__label {
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .criteria__note {
+    margin-top: 1.25rem;
+    color: var(--ink-muted);
+    font-size: var(--text-small);
+  }
+
+  @media (max-width: 52rem) {
+    .flow {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .flow__stage {
+      padding-right: 0;
+    }
+
+    .flow__lanes {
+      border-left: 2px solid var(--ink);
+      border-top: 0;
+    }
+
+    .flow__lane {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .flow__result {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: start;
+      margin-top: 0.875rem;
+    }
+
+    .criteria__strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .criteria__cell:nth-child(odd) {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+</style>
