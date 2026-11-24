@@ -73,10 +73,9 @@ export const contest = {
   },
 } as const;
 
-/** 사이트 책임자와 제작자. 제작자는 페이지 맨 아래에 작게 표기한다. */
+/** 사이트 책임자. */
 export const credits = {
   manager: { name: '여지호', affiliation: '가천대학교 부교수', email: contest.email },
-  maker: { name: '김태우', affiliation: '가천대학교 CAMUS Lab 학부생', year: '3학년', email: 'twdaniel@gachon.ac.kr' },
 } as const;
 
 /** 대상·최우수상은 2차 발표평가로, 우수상은 1차 심사로 정한다. */

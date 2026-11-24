@@ -1,5 +1,5 @@
 ---
-import { contest, credits, heroScenes } from '../data/contest';
+import { contest, heroScenes } from '../data/contest';
 import { koreanDate, withBase } from '../lib/format';
 
 // 마지막 구역의 지도는 바뀌지 않고 첫 지역(가천대학교)만 보여 준다.
@@ -9,7 +9,6 @@ const scenes = heroScenes.slice(0, 1).map((scene) => ({
   area: scene.area,
 }));
 const deadline = koreanDate(contest.deadline);
-const { maker } = credits;
 ---
 
 <div class="closing on-night">
@@ -56,9 +55,6 @@ const { maker } = credits;
     </dl>
     <div class="closing__small">
       <p class="closing__copy mono">© {contest.year} {contest.host}</p>
-      <p class="closing__maker">
-        제작 {maker.affiliation} {maker.name} ({maker.year}) · <a class="mono" href={`mailto:${maker.email}`}>{maker.email}</a>
-      </p>
     </div>
   </footer>
 </div>
@@ -182,8 +178,7 @@ const { maker } = credits;
     text-align: right;
   }
 
-  .closing__copy,
-  .closing__maker {
+  .closing__copy {
     color: var(--on-night-muted);
     font-size: 0.75rem;
     line-height: 1.5;

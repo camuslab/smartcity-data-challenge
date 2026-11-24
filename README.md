@@ -12,9 +12,9 @@
 ![Tests](https://img.shields.io/badge/tests-42%20passing-2EA043)
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-A11y%20100%20%C2%B7%20SEO%20100-F5A623?logo=lighthouse&logoColor=white)
 
-**[사이트 보기 → twtwtiwa05.github.io/smartcity-data-challenge](https://twtwtiwa05.github.io/smartcity-data-challenge/)**
+**[사이트 보기 → camuslab.github.io/smartcity-data-challenge](https://camuslab.github.io/smartcity-data-challenge/)**
 
-[만든 사람](#만든-사람) · [빠른 시작](#빠른-시작) · [내용 수정](#내용-수정) · [구조](#구조) · [배포](#배포)
+[문의](#문의) · [빠른 시작](#빠른-시작) · [내용 수정](#내용-수정) · [구조](#구조) · [배포](#배포)
 
 </div>
 
@@ -22,22 +22,21 @@
 
 도시 문제를 데이터로 분석하는 학과 경진대회의 일정, 참가 방법, 심사, 시상을 한 페이지에 담은 정적 사이트입니다. 작년까지 쓰던 노션 페이지를 대신합니다.
 
-| 항목 | 내용 |
-| --- | --- |
-| 제출 마감 | 2026년 12월 6일 (일) 23:59, 이메일 제출 |
-| 참가 대상 | 가천대학교 스마트시티학과 재학생 (복수전공·부전공 포함), 개인 또는 팀(최대 5명) |
-| 제출물 | PPT 20장 이내, 웹페이지·동영상 함께 제출 가능 |
-| 총상금 | 300만원 (대상 110만원, 최우수상 50만원 × 2, 우수상 30만원 × 3) |
-| 본선·시상 | 2026년 12월 10일 (목) 컨버전스 데이, 가천대학교 AI공학관 100호 |
+| 항목       | 내용                                                                             |
+| ---------- | -------------------------------------------------------------------------------- |
+| 제출 마감  | 2026년 12월 6일 (일) 23:59, 이메일 제출                                          |
+| 참가 대상  | 가천대학교 스마트시티학과 재학생 (복수전공·부전공 포함), 개인 또는 팀(최대 5명) |
+| 제출물     | PPT 20장 이내, 웹페이지·동영상 함께 제출 가능                                   |
+| 총상금     | 300만원 (대상 110만원, 최우수상 50만원 × 2, 우수상 30만원 × 3)                 |
+| 본선·시상 | 2026년 12월 10일 (목) 컨버전스 데이, 가천대학교 AI공학관 100호                   |
 
-## 만든 사람
+## 문의
 
-| 역할 | 이름 | 소속 | 연락처 |
-| --- | --- | --- | --- |
+| 역할            | 이름   | 소속              | 연락처               |
+| --------------- | ------ | ----------------- | -------------------- |
 | 책임자 (관리자) | 여지호 | 가천대학교 부교수 | jihoyeo@gachon.ac.kr |
-| 제작 | 김태우 | 가천대학교 CAMUS Lab 학부생 (3학년) | twdaniel@gachon.ac.kr |
 
-대회 문의는 책임자에게, 사이트 오류나 수정 제안은 제작자에게 보내 주세요.
+대회 문의는 책임자에게 보내 주세요. 사이트 오류나 수정 제안은 이 저장소의 Issues에 남겨 주세요.
 
 ## 특징
 
@@ -53,7 +52,7 @@
 Node 22.12 이상이 필요합니다.
 
 ```bash
-git clone https://github.com/twtwtiwa05/smartcity-data-challenge.git
+git clone https://github.com/camuslab/smartcity-data-challenge.git
 cd smartcity-data-challenge
 npm install
 npm run dev
@@ -61,14 +60,14 @@ npm run dev
 
 브라우저에서 http://localhost:4321 을 엽니다.
 
-| 명령 | 하는 일 |
-| --- | --- |
-| `npm run dev` | 개발 서버 실행 |
-| `npm test` | 단위 테스트 (날짜·상금·도로망 로직) |
-| `npm run check` | 타입 검사 |
-| `npm run build` | `dist/`에 정적 파일 생성 |
-| `npm run preview` | 빌드 결과 미리보기 |
-| `npm run roads` | 도로망 데이터 다시 생성 |
+| 명령                | 하는 일                               |
+| ------------------- | ------------------------------------- |
+| `npm run dev`     | 개발 서버 실행                        |
+| `npm test`        | 단위 테스트 (날짜·상금·도로망 로직) |
+| `npm run check`   | 타입 검사                             |
+| `npm run build`   | `dist/`에 정적 파일 생성            |
+| `npm run preview` | 빌드 결과 미리보기                    |
+| `npm run roads`   | 도로망 데이터 다시 생성               |
 
 ## 내용 수정
 
@@ -115,12 +114,12 @@ tests/                     단위 테스트
 
 히어로와 마지막 구역의 지도는 `scripts/build-roads.mjs`가 만든 `public/data/roads-<지역>.json`을 그린 것입니다. 스크립트는 OpenStreetMap 도로를 받아 교차로를 노드로 하는 그래프로 바꾸고, 1 m 격자에 맞춰 단순화합니다.
 
-| 지역 | 파일 | 도로 구간 |
-| --- | --- | --- |
-| 가천대학교 (성남시 수정구) | `roads-gachon.json` | 3,261 |
-| 서울 도심 (중구) | `roads-seoul.json` | 7,521 |
-| 강남 (강남구) | `roads-gangnam.json` | 5,783 |
-| 송도국제도시 (인천 연수구) | `roads-songdo.json` | 1,385 |
+| 지역                       | 파일                   | 도로 구간 |
+| -------------------------- | ---------------------- | --------- |
+| 가천대학교 (성남시 수정구) | `roads-gachon.json`  | 3,261     |
+| 서울 도심 (중구)           | `roads-seoul.json`   | 7,521     |
+| 강남 (강남구)              | `roads-gangnam.json` | 5,783     |
+| 송도국제도시 (인천 연수구) | `roads-songdo.json`  | 1,385     |
 
 ```bash
 npm run roads -- --refresh                # 모든 지역의 원본을 OpenStreetMap에서 받아 생성
@@ -140,14 +139,14 @@ npm run roads                             # 받아 둔 원본으로 다시 생�
 
 ## 기술
 
-| 영역 | 사용한 것 |
-| --- | --- |
-| 사이트 생성 | [Astro 6](https://astro.build) (정적 출력) |
-| 언어 | TypeScript, CSS |
-| 글꼴 | [Pretendard](https://github.com/orioncactus/pretendard), [JetBrains Mono](https://www.jetbrains.com/lp/mono/) |
-| 그래픽 | Canvas 2D (외부 라이브러리 없음) |
-| 테스트 | [Vitest](https://vitest.dev) |
-| 배포 | GitHub Actions, GitHub Pages |
+| 영역        | 사용한 것                                                                                                   |
+| ----------- | ----------------------------------------------------------------------------------------------------------- |
+| 사이트 생성 | [Astro 6](https://astro.build) (정적 출력)                                                                   |
+| 언어        | TypeScript, CSS                                                                                             |
+| 글꼴        | [Pretendard](https://github.com/orioncactus/pretendard), [JetBrains Mono](https://www.jetbrains.com/lp/mono/) |
+| 그래픽      | Canvas 2D (외부 라이브러리 없음)                                                                            |
+| 테스트      | [Vitest](https://vitest.dev)                                                                                 |
+| 배포        | GitHub Actions, GitHub Pages                                                                                |
 
 ## 출처
 
